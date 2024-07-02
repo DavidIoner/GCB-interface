@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+from PyQt5.QtCore import Qt
+import os
 
-class MaterialButtonSimulator(QWidget):
+class MultiButtonSimulator(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -8,34 +10,46 @@ class MaterialButtonSimulator(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        btn = QPushButton('Clique', self)
-        btn.setStyleSheet("""
-            QPushButton {
-                background-color: #6200EE;  /* Primary color */
-                color: white;               /* White text */
-                border: none;               /* No border */
-                border-radius: 4px;         /* Rounded corners */
-                padding: 16px 24px;         /* Padding */
-                font-size: 14px;            /* Font size */
-                text-transform: uppercase;  /* Uppercase text */
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2); /* Shadow */
-                transition: background-color 0.3s ease;  /* Smooth transition */
-            }
-            QPushButton:hover {
-                background-color: #3700B3;  /* Darker primary on hover */
-            }
-        """)
-        btn.clicked.connect(self.on_click)
-        layout.addWidget(btn)
+        # Botão principal com estilo "primary"
+        btn_primary = QPushButton('Botão Principal', self)
+        btn_primary.setObjectName('primary')
+        btn_primary.clicked.connect(self.on_primary_click)
+        layout.addWidget(btn_primary)
+
+        # Botão secundário com estilo "secondary"
+        btn_secondary = QPushButton('Botão Secundário', self)
+        btn_secondary.setObjectName('secondary')
+        btn_secondary.clicked.connect(self.on_secondary_click)
+        layout.addWidget(btn_secondary)
 
         self.setLayout(layout)
-        self.setWindowTitle('Material Design Button')
+        self.setWindowTitle('Botões com Estilos Diferentes')
+
+        # Ler o arquivo de estilo e aplicar
+        self.apply_stylesheet('styles.qss')
+
+        
+
+        # Configurar a janela para tela cheia sem bordas
+        # self.setWindowFlags(Qt.FramelessWindowHint)
+        # self.showFullScreen()
         self.show()
 
-    def on_click(self):
-        print('Botão clicado!')
+    def apply_stylesheet(self, stylesheet_path):
+        if os.path.exists(stylesheet_path):
+            with open(stylesheet_path, 'r') as file:
+                stylesheet = file.read()
+                self.setStyleSheet(stylesheet)
+        else:
+            print(f"Arquivo de estilo '{stylesheet_path}' não encontrado.")
+
+    def on_primary_click(self):
+        print('Botão Principal clicado!')
+
+    def on_secondary_click(self):
+        print('Botão Secundário clicado!')
 
 if __name__ == '__main__':
     app = QApplication([])
-    ex = MaterialButtonSimulator()
+    ex = MultiButtonSimulator()
     app.exec_()
