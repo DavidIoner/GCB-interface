@@ -1,4 +1,6 @@
 from PySide6.QtCore import QSettings, Qt
+import os
+
 
 def restore_geometry(widget):
     settings = QSettings("MyCompany", "MyApp")
@@ -23,3 +25,10 @@ def set_screen_geometry(widget, type="full"):
         restore_geometry(widget)
 
 
+def apply_stylesheet(widget, stylesheet_path):
+    if os.path.exists(stylesheet_path):
+        with open(stylesheet_path, 'r') as file:
+            stylesheet = file.read()
+            widget.setStyleSheet(stylesheet)
+    else:
+        print(f"Arquivo de estilo '{stylesheet_path}' não encontrado.")

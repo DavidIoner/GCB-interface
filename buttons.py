@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QPushButton
 
-class PrimaryButton(QPushButton):
+class GoToButton(QPushButton):
     def __init__(self, text, parent=None):
         super().__init__(text, parent)
         self.setObjectName('primary')

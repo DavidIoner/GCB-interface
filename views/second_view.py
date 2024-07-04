@@ -1,6 +1,7 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton
-from utils import  save_geometry, set_screen_geometry
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QSpacerItem, QSizePolicy, QHBoxLayout
+from utils import  save_geometry, set_screen_geometry, apply_stylesheet
 from PySide6.QtCore import QTimer
+from buttons import GoToButton
 
 class SecondView(QWidget):
     def __init__(self):
@@ -9,17 +10,24 @@ class SecondView(QWidget):
 
     def initUI(self):
         layout = QVBoxLayout()
+        button_layout = QHBoxLayout()
 
         # Botão para voltar à tela principal
-        btn_back = QPushButton('Voltar para Mapa', self)
+        btn_back = GoToButton('Voltar para Mapa', self)
         btn_back.clicked.connect(self.go_to_main_view)
-        layout.addWidget(btn_back)
-
+        button_layout.addWidget(btn_back)
+        # Adicionar um espaçador 
+        button_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
         self.setLayout(layout)
         self.setWindowTitle('Segunda Tela')
+        layout.addStretch()
+        layout.addLayout(button_layout)
+
 
         # Restaurar a posição e o tamanho da janela
         set_screen_geometry(self, "max")
+        apply_stylesheet(self, 'styles.qss')
+
 
     def closeEvent(self, event):
         save_geometry(self)
