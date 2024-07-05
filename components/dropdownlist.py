@@ -38,4 +38,4 @@ class DropdownButtonWidget(QWidget):
             button.hide()
 
         # Mostra o botão correspondente à opção selecionada
-        # self.buttons[index].show()
+        self.buttons[index].show()

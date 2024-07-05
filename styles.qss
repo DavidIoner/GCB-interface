@@ -27,3 +27,13 @@ QPushButton#secondary {
 QPushButton#secondary:hover {
     background-color: #018786;  /* Darker teal on hover */
 }
+
+QPushButton#Icon {
+    background-color: rgba(0, 0, 0, 20);  /* Quase transparente */
+    border: 2px solid #000;
+    border-radius: 10px;  /* Bordas arredondadas */
+}
+
+QPushButton#Icon:hover {
+    background-color: rgba(0, 0, 0, 40);  /* Fundo um pouco mais opaco ao passar o mouse */
+}

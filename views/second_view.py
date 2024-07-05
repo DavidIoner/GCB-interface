@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSpacerItem, QSizePolicy, QHBoxLayout
-from utils import  save_geometry, set_screen_geometry, apply_stylesheet
+from utils.screen_size import  save_geometry, set_screen_geometry, apply_stylesheet
 from PySide6.QtCore import QTimer
-from buttons import GoToButton
+from components.buttons import GoToButton
 
 class SecondView(QWidget):
     def __init__(self):

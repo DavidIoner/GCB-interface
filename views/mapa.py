@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy
 from PySide6.QtCore import Qt, QTimer
 import os
-from buttons import GoToButton, SecondaryButton
-from utils import save_geometry, set_screen_geometry, apply_stylesheet
+from components.buttons import GoToButton, SecondaryButton
+from utils.screen_size import save_geometry, set_screen_geometry, apply_stylesheet
 from components.dropdownlist import DropdownButtonWidget
+from components.buttons import ItemButton
 
 class Mapa(QWidget):
     def __init__(self):
@@ -27,6 +28,10 @@ class Mapa(QWidget):
         # Layout horizontal para os botões
         button_layout = QHBoxLayout()
 
+        btn_item = ItemButton("assets/test.svg")
+        button_layout.addWidget(btn_item)
+
+
         # Adicionar botões usando classes específicas
         btn_primary = GoToButton('Ir para Segunda Tela', self)
         btn_primary.clicked.connect(self.go_to_second_view)
@@ -45,7 +50,6 @@ class Mapa(QWidget):
         apply_stylesheet(self, 'styles.qss')
 
         # Restaurar a posição e o tamanho da janela
-        # restore_geometry(self)
         set_screen_geometry(self, "max")
         
 
