@@ -35,5 +35,5 @@ QPushButton#Icon {
 }
 
 QPushButton#Icon:hover {
-    background-color: rgba(0, 0, 0, 40);  /* Fundo um pouco mais opaco ao passar o mouse */
+    background-color: rgba(0, 9, 130, 40);  /* Fundo um pouco mais opaco ao passar o mouse */
 }

@@ -1,12 +1,14 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy
-from PySide6.QtCore import Qt, QTimer
-import os
-from components.buttons import GoToButton, SecondaryButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow
+from PySide6.QtCore import QTimer
+from components.buttons import GoToButton
 from utils.screen_size import save_geometry, set_screen_geometry, apply_stylesheet
 from components.dropdownlist import DropdownButtonWidget
 from components.buttons import ItemButton
+from components.image import ImageViewer
 
-class Mapa(QWidget):
+
+
+class Mapa(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -20,17 +22,56 @@ class Mapa(QWidget):
         ]
 
 
-        main_layout = QVBoxLayout()
+        # Widget central
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+
+        main_layout = QVBoxLayout(central_widget)
+        lateral_layout = QHBoxLayout()
         # Cria o widget da dropdown list
         self.dropdown_widget = DropdownButtonWidget(items)
 
         main_layout.addWidget(self.dropdown_widget)
-        # Layout horizontal para os botões
+        main_layout.addLayout(lateral_layout)
+
+        # Layout vertical esquerdo
+        left_layout = QVBoxLayout()
+        left_layout.setSpacing(8)
+        left_widget = QWidget()
+        left_widget.setLayout(left_layout)
+        lateral_layout.addWidget(left_widget)
+
+
+
+        central_layout = QVBoxLayout()
+        central_widget_inner = QWidget()
+        central_widget_inner.setLayout(central_layout)
+        lateral_layout.addWidget(central_widget_inner)
+
+        image_viewer = ImageViewer("assets/image.png")
+        central_layout.addWidget(image_viewer)
+        
+
+
+        # Layout vertical direito
+        right_layout = QVBoxLayout()
+        right_layout.setSpacing(8)
+        right_widget = QWidget()
+        right_widget.setLayout(right_layout)
+        lateral_layout.addWidget(right_widget)
+
+
+        for _ in range(5):
+            button = ItemButton("assets/test.svg")
+            button.clicked.connect(self.on_button1_click)
+            left_layout.addWidget(button)
+
+
+        # btn_item = ItemButton("assets/test.svg")
+        # btn_item.clicked.connect(self.on_button1_click)
+        # button_layout.addWidget(btn_item)
+
         button_layout = QHBoxLayout()
-
-        btn_item = ItemButton("assets/test.svg")
-        button_layout.addWidget(btn_item)
-
 
         # Adicionar botões usando classes específicas
         btn_primary = GoToButton('Ir para Segunda Tela', self)
@@ -53,6 +94,8 @@ class Mapa(QWidget):
         set_screen_geometry(self, "max")
         
 
+
+
     def on_button1_click(self):
         print("Botão 1 clicado")
 
@@ -74,4 +117,4 @@ class Mapa(QWidget):
         self.second_view.show()
 
         # Fechar a tela atual somente depois que a nova estiver visível
-        QTimer.singleShot(1000, self.close)
+        QTimer.singleShot(500, self.close)
