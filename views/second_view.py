@@ -41,4 +41,4 @@ class SecondView(QWidget):
         self.main_view.show()
 
         # Fechar a tela atual somente depois que a nova estiver visível
-        QTimer.singleShot(1000, self.close)
+        QTimer.singleShot(500, self.close)

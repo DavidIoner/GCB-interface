@@ -4,4 +4,4 @@ Interface em Python para a utilização em uma tela touchscreen controlada por u
 
 ### Dependencias
 
-PyQt5
+PyQt6

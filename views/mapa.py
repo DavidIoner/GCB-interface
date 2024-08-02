@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow, QGraphicsScene, QGraphicsPixmapItem, QGraphicsView
 from PySide6.QtCore import QTimer
+from PySide6.QtGui import QPixmap
 from components.buttons import GoToButton
 from utils.screen_size import save_geometry, set_screen_geometry, apply_stylesheet
 from components.dropdownlist import DropdownButtonWidget
@@ -25,7 +26,13 @@ class Mapa(QMainWindow):
         # Widget central
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
+        self.view = QGraphicsView(self)
+        self.scene = QGraphicsScene(self)
+        self.view.setScene(self.scene)
 
+        self.pixmap = QPixmap("assets/image.png")
+        self.pixmap_item = QGraphicsPixmapItem(self.pixmap)
+        self.scene.addItem(self.pixmap_item)
         main_layout = QVBoxLayout(central_widget)
         lateral_layout = QHBoxLayout()
         # Cria o widget da dropdown list

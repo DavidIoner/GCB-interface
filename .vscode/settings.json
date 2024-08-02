@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "./_venv/bin/python",
+    "files.exclude": { // Oculta os arquivos e pastas 
+        "_venv": true,
+        "**/__pycache__": true
+    }
+}
