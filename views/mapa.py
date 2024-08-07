@@ -1,13 +1,11 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow, QGraphicsScene, QGraphicsPixmapItem, QPushButton
-from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow, QGraphicsScene, QGraphicsPixmapItem, QPushButton, QFrame
+from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QPixmap
 from components.buttons import GoToButton
 from utils.screen_size import save_geometry, set_screen_geometry, apply_stylesheet
 from components.dropdownlist import DropdownButtonWidget
 from components.buttons import ItemButton
-from components.image import MapViewer
-
-
+from components.image import GraphicsView
 
 class Mapa(QMainWindow):
     def __init__(self):
@@ -22,59 +20,55 @@ class Mapa(QMainWindow):
             {"name": "Opção 3", "icon": "assets/dht.png", "onclick": self.on_button3_click}
         ]
 
-
-        # Widget central
+        # Cria o widget principal e define o layout principal
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
+        self.main_layout = QVBoxLayout(central_widget)
 
-        # Adiciona a imagem ao widget
-        self.view = MapViewer(self)
-        self.scene = QGraphicsScene(self)
-        self.view.setScene(self.scene)
-        self.pixmap = QPixmap("assets/image.png")
-        self.pixmap_item = QGraphicsPixmapItem(self.pixmap)
-        self.scene.addItem(self.pixmap_item)        
-
-        main_layout.addWidget(self.view)
+        # Configurar QGraphicsView e QGraphicsScene
+        self.graphics_view = GraphicsView(self)
+        self.graphics_scene = QGraphicsScene(self)
+        self.graphics_view.setScene(self.graphics_scene)
         
-        # Cria o widget da dropdown list
-        self.dropdown_widget = DropdownButtonWidget(items)
-        main_layout.addWidget(self.dropdown_widget)
+        # Carregar a imagem e adicionar à cena
+        self.pixmap = QPixmap("assets/image.png")  # Caminho da imagem
+        if not self.pixmap.isNull():
+            self.pixmap_item = QGraphicsPixmapItem(self.pixmap)
+            self.graphics_scene.addItem(self.pixmap_item)
+        else:
+            print("Failed to load image")
 
-        # Adicionando botões sobre a imagem
-        for i in range(5):
-            button = QPushButton(f"Botão {i + 1}", self)
-            button.setFixedSize(100, 50)
-            button.move(10, 10 + i * 60)  # Posicionando botões verticalmente
-            button.setParent(self.view)
+        # Adicionar GraphicsView ao layout principal
+        self.main_layout.addWidget(self.graphics_view)
 
-        
+        # Widget da barra lateral
+        self.left_bar = QWidget(self)
+        left_bar_layout = QVBoxLayout()
+        left_bar_layout.addWidget(QPushButton("Button 1"))
+        left_bar_layout.addWidget(QPushButton("Button 2"))
+        self.left_bar.setLayout(left_bar_layout)
+        self.left_bar.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.left_bar.setFixedWidth(150)  # Definir uma largura fixa para a barra lateral
 
-        # button_layout = QHBoxLayout()
+        # Definir a cor azul com transparência para a barra lateral
+        self.left_bar.setStyleSheet("background-color: rgba(0, 0, 255, 150);")  # Azul com transparência
 
-        # # Botão de navegação
-        # btn_primary = GoToButton('Ir para Segunda Tela', self)
-        # btn_primary.clicked.connect(self.go_to_second_view)
-        # button_layout.addWidget(btn_primary)
-        # # Adicionar um espaçador 
-        # button_layout.addItem(QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        
-        # main_layout.addStretch()
-        # main_layout.addLayout(button_layout)
+        # Adicionar um QFrame para criar uma sobreposição
+        self.overlay_frame = QFrame(self)
+        self.overlay_frame.setLayout(QVBoxLayout())
+        self.overlay_frame.layout().addWidget(self.left_bar)
+        self.overlay_frame.setStyleSheet("background: rgba(0, 0, 0, 0);")  # Tornar o fundo transparente
+        self.overlay_frame.setGeometry(0, 0, 150, self.height())  # Ajuste conforme necessário
+        self.overlay_frame.setAttribute(Qt.WA_TranslucentBackground)  # Para permitir fundo transparente
 
-
-        self.setLayout(main_layout)
         self.setWindowTitle('Mapa')
 
-        # Ler o arquivo de estilo e aplicar
-        apply_stylesheet(self, 'styles.qss')
-
         # Restaurar a posição e o tamanho da janela
-        set_screen_geometry(self, "max")
-        
+        set_screen_geometry(self, "full")
 
-
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.overlay_frame.setGeometry(0, 0, 150, self.height())  # Atualizar a geometria na mudança de tamanho
 
     def on_button1_click(self):
         print("Botão 1 clicado")

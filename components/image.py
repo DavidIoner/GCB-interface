@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QGraphicsView
 from PySide6.QtCore import Qt
 
 
-class MapViewer(QGraphicsView):
+class GraphicsView(QGraphicsView):
     def __init__(self, parent=None):
         super().__init__(parent)
         # self.setRenderHint(QGraphicsView.Antialiasing)
